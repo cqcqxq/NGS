@@ -1,0 +1,72 @@
+NGS_Process_build (NGS流程构建)
+
+Download the demo file(demo.tar.gz) from http://172.16.98.98.cqu.pt/xinqi
+If you have any question,  contact with 2016212287@stu.cqupt.edu.cn
+
+Follow the next orders with a straightforward experience of NGS.
+cd NGS_Process_Build.tar.gz
+cd sample_backup
+sh decompression.sh
+cd ..
+vim export_path.txt
+sh NGS_Process_Build.sh 
+
+
+NGS_Process_Build.sh is a one-key script to carry out our task.
+	for instance:
+	sh NGS_Process_Build.sh 
+
+Insturctions
+
+1.During the process, the yeast(Saccharomyces cerevisiae) was chosen as the NGS experiment object.
+
+2.The prepared files are below the directory, which includes the your_object.fasta and your_object.gff and your_object.sra that can be transformed to your_object.fastq, and all of them can be downloaded from NCBI.
+
+Procedures
+
+1.Download tools or applets from the Websites such as  bowtie2, NCBI etc.
+These tools are highly recommended:
+	bowtie2
+	sratoolkit
+	tophat
+	cufflinks
+All of them can be easily obtained from official websites.
+Needless to say, They will be provided in the directory.
+
+2.Download the species you would like to run NGS from NCBI.
+What we demonstrate is the Yeast(baker's yeast) on account of its size.
+These files are basically needed:
+	your_object.fasta(genome files)
+	your_object.gtf(genome annotation files)
+	your_object.ras(It can be converted into fastq format)
+
+3.Preparation 
+Add orders to environment.
+	For instance:
+		export PATH=$PATH:~/NGS_Process_building/sratoolkit.2.9.6-1-centos_linux64/bin
+		export PATH=$PATH:~/tophat_file/tophat-2.0.13.Linux_x86_64
+		etc.
+	pay attention to the location of your files.
+	write these instances into your ~/.bashrc in cast orders' 'disappear'
+
+4.Constitute your_object index
+	for instance:
+		bowtie2-build GCF_000146045.2_R64_genomic.fna Yeast
+You will get *.bt2 format file.
+
+5.tophat for producing sam format file
+	for instance:
+		fasterq-dump *.ras
+		tophat -p8 -G GCF_000146045.2_R64_genomic.gff -T ./Yeast ./SRR9043513.sra_1.fastq ./SRR9043513.sra_2.fastq 
+You will get bam format file.
+
+6.cufflinks for merging
+	for instance:
+		cufflinks tophat_out/accepted_hits.bam 
+You will get standard output files like genes.fpkm_tracking and isoforms.fpkm_tracking etc.
+
+Refernces:
+1.http://blog.leanote.com/post/375952584@qq.com/tophat
+2.https://www.cnblogs.com/OA-maque/p/4833225.html
+3.https://www.ncbi.nlm.nih.gov/genome/15?genome_assembly_id=22535.
+4.https://www.youtube.com/watch?v=RADbVJnYBhg&t=93s
